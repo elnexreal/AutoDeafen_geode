@@ -5,5 +5,18 @@
 	"id": "elnexreal.auto_deafen",
 	"name": "Auto Deafen",
 	"developer": "elnexreal",
-	"description": "Auto deafen yourself when you get to a certain percentage."
+	"description": "Auto deafen yourself when you get to a certain percentage.",
+	"settings": {
+		"enabled": {
+			"default": true,
+			"type": "bool"
+		},
+		"percentage": {
+			"control": {
+				"input": true
+			},
+			"type": "int",
+			"default": 0
+		}
+	}
 }
