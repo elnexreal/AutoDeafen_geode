@@ -19,6 +19,19 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 		return true;
 	}
 
+	void postUpdate(float dt) {
+		PlayLayer::postUpdate(dt);
+
+		// log::info("s_percent: {}, c_percent: {}", m_fields->s_percent, this->getCurrentPercentInt());
+
+		if (m_fields->s_enabled) {
+			if (this->getCurrentPercentInt() >= m_fields->s_percent && !AutoDeafen::enabled) {
+				log::info("Should be enabled rn");
+
+				AutoDeafen::toggleDeafen();
+			}
+		}
+	}
 };
 
 struct PauseLayerHooks : Modify<PauseLayerHooks, PauseLayer> {
