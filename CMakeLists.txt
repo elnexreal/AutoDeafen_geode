@@ -6,10 +6,11 @@ set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
 project(AutoDeafen VERSION 1.0.0)
 
-add_library(${PROJECT_NAME} SHARED
-    src/main.cpp
-    # Add your cpp files here
+file (GLOB SOURCES
+    src/*.cpp
 )
+
+add_library(${PROJECT_NAME} SHARED ${SOURCES})
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")
@@ -19,4 +20,5 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
+target_link_libraries(${PROJECT_NAME} geode-sdk)
 setup_geode_mod(${PROJECT_NAME})
