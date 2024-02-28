@@ -5,6 +5,12 @@
 	"id": "elnexreal.auto_deafen",
 	"name": "Auto Deafen",
 	"developer": "elnexreal",
+	"tags": [
+		"Utility",
+		"Discord",
+		"Integration"
+	],
+	"repository": "https://github.com/elnexreal/AutoDeafen_geode",
 	"description": "Auto deafen yourself when you get to a certain percentage.",
 	"settings": {
 		"enabled": {
@@ -16,7 +22,9 @@
 				"input": true
 			},
 			"type": "int",
-			"default": 0
+			"default": 0,
+			"min": 0,
+			"max": 100
 		}
 	}
 }
