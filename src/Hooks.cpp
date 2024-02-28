@@ -35,4 +35,12 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 };
 
 struct PauseLayerHooks : Modify<PauseLayerHooks, PauseLayer> {
+	// this should disable deafening on pause btw :)
+	void customSetup() {
+		PauseLayer::customSetup();
+
+		if (AutoDeafen::enabled) {
+			AutoDeafen::toggleDeafen();
+		}
+	}
 };
