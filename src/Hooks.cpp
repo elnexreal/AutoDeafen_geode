@@ -85,8 +85,9 @@ struct PauseLayerHooks : Modify<PauseLayerHooks, PauseLayer> {
 		auto menu = this->getChildByID("right-button-menu");
 
 		auto spr = CCSprite::createWithSpriteFrameName("GJ_optionsBtn02_001.png");
+		spr->setScale(0.7f);
+
 		auto btn = CCMenuItemSpriteExtra::create(spr, this, menu_selector(PauseLayerHooks::settingsBtn));
-		btn->setScale(0.7f);
 
 		menu->addChild(btn);
 		menu->updateLayout();
