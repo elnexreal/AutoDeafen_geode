@@ -22,12 +22,12 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 	void postUpdate(float dt) {
 		PlayLayer::postUpdate(dt);
 
+		auto c_percent = this->getCurrentPercentInt();
+
 		// log::info("s_percent: {}, c_percent: {}", m_fields->s_percent, this->getCurrentPercentInt());
 
 		if (m_fields->s_enabled) {
-			if (this->getCurrentPercentInt() >= m_fields->s_percent && !AutoDeafen::enabled) {
-				log::info("Should be enabled rn");
-
+			if (c_percent >= m_fields->s_percent && !AutoDeafen::enabled && !this->m_player1->m_isDead && !this->m_player2->m_isDead && c_percent != 100) {
 				AutoDeafen::toggleDeafen();
 			}
 		}
