@@ -32,6 +32,41 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 			}
 		}
 	}
+
+	void onQuit() {
+		PlayLayer::onQuit();
+
+		if (AutoDeafen::enabled)
+			AutoDeafen::toggleDeafen();
+	}
+
+	void onExit() {
+		PlayLayer::onExit();
+
+		if (AutoDeafen::enabled)
+			AutoDeafen::toggleDeafen();
+	}
+
+	void resetLevel() {
+		PlayLayer::resetLevel();
+
+		if (AutoDeafen::enabled)
+			AutoDeafen::toggleDeafen();
+	}
+
+	void destroyPlayer(PlayerObject *player, GameObject *p1) {
+		PlayLayer::destroyPlayer(player, p1);
+
+		if (player && player->m_isDead && AutoDeafen::enabled)
+			AutoDeafen::toggleDeafen();
+	}
+
+	void levelComplete() {
+		PlayLayer::levelComplete();
+
+		if (AutoDeafen::enabled)
+			AutoDeafen::toggleDeafen();
+	}
 };
 
 struct PauseLayerHooks : Modify<PauseLayerHooks, PauseLayer> {
