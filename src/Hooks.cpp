@@ -1,20 +1,22 @@
 #include "AutoDeafen.hpp"
 #include <Geode/Geode.hpp>
+#include <Geode/loader/SettingEvent.hpp>
 #include <Geode/modify/PauseLayer.hpp>
 #include <Geode/modify/PlayLayer.hpp>
+#include <Geode/ui/GeodeUI.hpp>
 
 using namespace geode::prelude;
 
-struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
-	int64_t s_percent;
-	bool s_enabled;
+int64_t s_percent;
+bool s_enabled;
 
+struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 	bool init(GJGameLevel *level, bool useReplay, bool dontCreateObjects) {
 		if (!PlayLayer::init(level, useReplay, dontCreateObjects))
 			return false;
 
-		m_fields->s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
-		m_fields->s_enabled = Mod::get()->getSettingValue<bool>("enabled");
+		s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
+		s_enabled = Mod::get()->getSettingValue<bool>("enabled");
 
 		return true;
 	}
@@ -26,8 +28,10 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 
 		// log::info("s_percent: {}, c_percent: {}", m_fields->s_percent, this->getCurrentPercentInt());
 
-		if (m_fields->s_enabled) {
-			if (c_percent >= m_fields->s_percent && !AutoDeafen::enabled && !this->m_player1->m_isDead && !this->m_player2->m_isDead && c_percent != 100) {
+		if (s_enabled) {
+			if (c_percent >= s_percent && !AutoDeafen::enabled && !this->m_player1->m_isDead && !this->m_player2->m_isDead && c_percent != 100) {
+				AutoDeafen::toggleDeafen();
+			} else if (AutoDeafen::enabled && c_percent < s_percent) {
 				AutoDeafen::toggleDeafen();
 			}
 		}
@@ -77,5 +81,47 @@ struct PauseLayerHooks : Modify<PauseLayerHooks, PauseLayer> {
 		if (AutoDeafen::enabled) {
 			AutoDeafen::toggleDeafen();
 		}
+
+		auto menu = this->getChildByID("right-button-menu");
+
+		auto spr = CCSprite::createWithSpriteFrameName("GJ_optionsBtn02_001.png");
+		auto btn = CCMenuItemSpriteExtra::create(spr, this, menu_selector(PauseLayerHooks::settingsBtn));
+		btn->setScale(0.7f);
+
+		menu->addChild(btn);
+		menu->updateLayout();
+	}
+
+	void settingsBtn(CCObject *sender) {
+		auto mod = Mod::get();
+		openSettingsPopup(mod);
+	}
+
+	void onResume(CCObject *sender) {
+		PauseLayer::onResume(sender);
+
+		s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
+		s_enabled = Mod::get()->getSettingValue<bool>("enabled");
+	}
+
+	void onRestart(CCObject *sender) {
+		PauseLayer::onRestart(sender);
+
+		s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
+		s_enabled = Mod::get()->getSettingValue<bool>("enabled");
+	}
+
+	void onPracticeMode(CCObject *sender) {
+		PauseLayer::onPracticeMode(sender);
+
+		s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
+		s_enabled = Mod::get()->getSettingValue<bool>("enabled");
+	}
+
+	void onNormalMode(CCObject *sender) {
+		PauseLayer::onNormalMode(sender);
+
+		s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
+		s_enabled = Mod::get()->getSettingValue<bool>("enabled");
 	}
 };
