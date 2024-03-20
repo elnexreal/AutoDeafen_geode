@@ -24,6 +24,11 @@
 			"default": true,
 			"type": "bool"
 		},
+		"enable-on-practice": {
+			"name": "Enabled on practice",
+			"default": false,
+			"type": "bool"
+		},
 		"percentage": {
 			"control": {
 				"input": true

@@ -9,6 +9,7 @@ using namespace geode::prelude;
 
 int64_t s_percent;
 bool s_enabled;
+bool s_enabledOnPractice;
 
 struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 	bool init(GJGameLevel *level, bool useReplay, bool dontCreateObjects) {
@@ -17,6 +18,7 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 
 		s_percent = Mod::get()->getSettingValue<int64_t>("percentage");
 		s_enabled = Mod::get()->getSettingValue<bool>("enabled");
+		s_enabledOnPractice = Mod::get()->getSettingValue<bool>("enabled-on-practice");
 
 		return true;
 	}
@@ -29,6 +31,9 @@ struct PlayLayerHooks : Modify<PlayLayerHooks, PlayLayer> {
 		// log::info("s_percent: {}, c_percent: {}", m_fields->s_percent, this->getCurrentPercentInt());
 
 		if (s_enabled) {
+			if (!this->m_player1->isInNormalMode() && !s_enabledOnPractice)
+				return;
+
 			if (c_percent >= s_percent && !AutoDeafen::enabled && !this->m_player1->m_isDead && !this->m_player2->m_isDead && c_percent != 100) {
 				AutoDeafen::toggleDeafen();
 			} else if (AutoDeafen::enabled && c_percent < s_percent) {
