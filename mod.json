@@ -24,7 +24,7 @@
 			"default": true,
 			"type": "bool"
 		},
-		"enable-on-practice": {
+		"enabled-on-practice": {
 			"name": "Enabled on practice",
 			"default": false,
 			"type": "bool"
